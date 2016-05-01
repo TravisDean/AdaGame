@@ -5,6 +5,7 @@
 -- the players up and by score it determines whether the person wins or
 -- loses the game. After 2 losses the person is eliminated from the game.
 --with Ada.Text_IO; use ada.text_io;
+-- Passes lexer, not linker of course
 with ada.integer_text_io; use ada.integer_text_io; 
 with Ada.Strings.Unbounded; 
 with Stacks;
