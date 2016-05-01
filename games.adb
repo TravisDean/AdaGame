@@ -38,9 +38,32 @@ procedure playGame is
         get_line(pName);
         get(pSkill);
         get(pAge);
-        pName = su.trim(pName);
+        pName := su.trim(pName);
         return Person(pName, pSkill, pAge, index => currIndex);
     end getPerson;
+
+    -- first by skill, then age, then index
+    function "<" (Left, Right : Person) return Boolean is
+    begin
+        if left.skill /= right.skill then
+            return left.skill < right.skill;
+        elsif left.age /= right.age then
+            return left.age < right.age;
+        else
+            return left.index < right.index
+        end if;
+    end "<";
+
+    procedure playMatch(p1: in out Person; p2: in out Person) is
+    begin
+        if p1 < p2 then
+            p1.losses := p1.losses + 1;
+            p2.wins := p2.wins + 1;
+        else
+            p2.losses := p2.losses + 1;
+            p1.wins := p1.wins + 1;
+        end if;
+    end playMatch;
 
     function getPlayers return Integer is
         index : Integer := 0;
