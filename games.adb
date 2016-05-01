@@ -42,16 +42,83 @@ procedure playGame is
         return Person(pName, pSkill, pAge, index => currIndex);
     end getPerson;
 
-    procedure getPlayers is
+    function getPlayers return Integer is
         index : Integer := 0;
     begin
         loop
-           exit when end_of_file;
-            enqueue(zeroLoss, getPerson(  
+            exit when end_of_file;
+            index := index + 1;
+            enqueue(getPerson(index), zeroLoss);
+        end loop;
+        return index;
+    end getPlayers;
 
+    procedure gameloop is
+        numPlayers : Integer;
+        best : Person;
+    begin
+        numPlayers := getPlayers();
+        if numPlayers = 0 then
+            exit;
+        elsif numPlayers = 1 then
+            print(front(zeroLoss));     -- Need to def print
+            exit;
+        end if;
+
+        while not is_Empty(zeroLoss) loop
+            -- Normal case: get two, check match, enqueue
+           p1 := front(zeroLoss); dequeue(zeroLoss);
+           -- Handle odd and even amounts
+           if not is_Empty(zeroLoss) then
+               p2 := front(zeroLoss); dequeue(zeroLoss);
+               playMatch(p1, p2);   -- Modifying func
+               if p1.losses = 0 then
+                   enqueue(p1, zeroLoss);
+                   enqueue(p2, oneLoss);
+               elsif
+                   enqueue(p2, zeroLoss);
+                   enqueue(p1, oneLoss);
+               end if;
+            -- The odd num left case
+            else then
+                best := p1; 
+           end if;
+        end loop;
+
+        while not is_Empty(oneLoss) loop
+            -- Normal case: get two, check match, enqueue
+           p1 := front(oneLoss); dequeue(oneLoss);
+           -- Handle odd and even amounts
+           if not is_Empty(oneLoss) then
+               p2 := front(oneLoss); dequeue(oneLoss);
+               playMatch(p1, p2);   -- Modifying func
+               if p1.losses = 1 then
+                   enqueue(p1, oneLoss);
+                   push(p2, done);
+               elsif
+                   enqueue(p2, oneLoss);
+                   push(p1, done);
+               end if;
+            -- The odd num left case
+            else then   -- so p1 must face our best for the title
+               playMatch(best, p1);
+               if best.losses = 0 then
+                   push(p1, done);
+                   push(best, done);
+               elsif            -- All this double push/enq stuff could be 
+                                -- simplified with pointers
+                   push(best, done);
+                   push(p1, done);
+               end if;
+           end if;
+        end loop;
+
+        -- So now we have to print off the results
+        while not is_Empty(done) loop
+            print(top(done));
+            pop(done);
+        end loop;
 begin
-    function getInput(
-    zeroLoss := getInput();
 
 
  
